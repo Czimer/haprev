@@ -127,6 +127,17 @@ const updateNotificationSettings = settings => ({
   payload: settings
 })
 
+
+export const authorizeFirebase = async (user) => {
+  try {
+    console.log(user);
+    const response = await firebase.auth().signInWithEmailAndPassword(user.mail, user.password);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const authorize = appId => dispatch => {
   dispatch(authReq(appId))
 

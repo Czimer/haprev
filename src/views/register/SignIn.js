@@ -4,6 +4,7 @@ import styles from './RegisterViewStyles';
 import RegisterInput from './RegisterInputField';
 
 const PHONE = 'phone';
+const EMAIL = 'mail';
 const PASSWORD = 'password';
 
 class SignInView extends React.Component {
@@ -16,10 +17,12 @@ class SignInView extends React.Component {
       this.state = {
           disabled: true,
           spinner: false,
+          mail: null,
           phone: null,
           password: null,
           phoneValidate: false,
           passwordValidate: false,
+          mailValidate: false
         };
     }
   
@@ -29,30 +32,28 @@ class SignInView extends React.Component {
 
     validField=(text,len) => { return text && text.length > len }
 
-    validatePhone=(value) => {
-        if(this.validField(value,9)){
-            disabled = !this.state.passwordValidate
-            this.setState({phone:value,phoneValidate:true,disabled:disabled})
-        }
-        else
-            this.setState({phone:value,phoneValidate:false,disabled:true})
+    validateMail = (value) => {
+        disabled = !this.state.passwordValidate 
+            this.setState({mail:value ,mailValidate:true, disabled:disabled})
+        console.log(value);
     }
 
-    validatePassword=(value) => {
-        if(this.validField(value,3)){
-            disabled = !this.state.phoneValidate 
-            this.setState({password:value,passwordValidate:true,disabled:disabled})
+    validatePassword = (value) => {
+        if (this.validField(value,3)){
+            disabled = !this.state.mailValidate 
+            this.setState({password:value, passwordValidate:true, disabled:disabled})
         }
         else
-            this.setState({password:value,passwordValidate:false,disabled:true})
+            this.setState({password:value, passwordValidate:false, disabled:true})
     }
 
     handlePress = async ()=>{
         this.setState({spinner: true})
         let user = {}
-        user[PHONE] = this.state.phone;
-        user[PASSWORD] = this.state.password
-        let login = await this.props.navigation.state.params.signInWithAnotherDevice(user);
+        user[EMAIL] = this.state.mail;
+        user[PASSWORD] = this.state.password;
+        //let login = await this.props.navigation.state.params.signInWithAnotherDevice(user);
+        let login = await this.props.authorizeFirebase(user);
         if(!login)
             alert('מספר פלאפון או סיסמה לא נכונים')
         this.setState({spinner: false})
@@ -71,13 +72,14 @@ class SignInView extends React.Component {
                 <Text style={styles.title}>התחברות</Text>
             </View>
         </KeyboardAvoidingView>
-            <RegisterInput placeholder='מספר טלפון'
+            <RegisterInput placeholder='מייל'
                 value={''}
-                keyboardType='phone-pad'
-                ref={input => {this.inputs[PHONE] = input;}}
-                onChangeText={(value) => this.validatePhone(value)}
+                keyboardType='email-address'
+                ref={input => {this.inputs[EMAIL] = input;}}
+                onChangeText={(value) => this.validateMail(value)}
                 onSubmitEditing={() => {this.focusNextField(PASSWORD);}}
-                iconName='phone-square'/>
+                //iconName='phone-square'
+                />
             <RegisterInput placeholder='סיסמה (לפחות 4 תווים)'
                 value={''}
                 keyboardType='phone-pad'

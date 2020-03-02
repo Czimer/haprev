@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import getStore from '../store/createStore'
 import Splash from '../views/splash/Splash'
-import initdb from './initDb'
+import { initDB } from './firebaseApp'
 
 const store = getStore
 
@@ -16,7 +16,7 @@ class App extends Component {
   }
 
   componentWillMount () {
-    initdb()
+    initDB();
     this.setState({ fontsAreLoaded: true })
   }
 

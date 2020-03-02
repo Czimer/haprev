@@ -21,7 +21,7 @@ const firebaseConfig = {
   messagingSenderId: keys.messagingSenderId
 }
 
-export default () => {
-  firebase.initializeApp(firebaseConfig)
+export const initDB = () => {
+  firebase.initializeApp(firebaseConfig);
   console.log("TCL: firebaseConfig", firebaseConfig)
 }
